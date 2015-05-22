@@ -14,8 +14,8 @@ module Bicycle
 
     def ratio(args={})
       chainring_size = args[:chainring_size] || :big
-      speed = args[:speed] || 1
-      (chainring[chainring_size]/cassette.gear(speed).to_f).round(2)
+      speed = cassette.gear(args[:speed]) || cassette.first
+      (chainring[chainring_size]/speed.to_f).round(2)
     end
 
     def ratios(args={})
