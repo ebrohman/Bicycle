@@ -1,6 +1,6 @@
 module Bicycle
   class Cassette
-    attr_reader :speed_1, :speed_2, :speed_3, :speed_4, :speed_5, :speed_6, :speed_7, :speed_8, :speed_9, :speed_10, :speed_11, :speeds
+    attr_reader :speed_1, :speed_2, :speed_3, :speed_4, :speed_5, :speed_6, :speed_7, :speed_8, :speed_9, :speed_10, :speed_11
     def initialize(args = [])
       @speed_1 = args[0] || 11
       @speed_2 = args[1] || 12
@@ -10,12 +10,15 @@ module Bicycle
       @speed_6 = args[5] || 16
       @speed_7 = args[6] || 17
       @speed_8 = args[7] || 19
-      @speed_9 = args[8] || 21
-      @speed_10 = args[9] || 23
-      @speed_11 = args[10] || 25
-      @speeds =  instance_variables.map do |speed|
+      @speed_9 = args[8] || 22
+      @speed_10 = args[9] || 25
+      @speed_11 = args[10] || 28
+    end
+
+    def speeds
+      instance_variables.map do |speed|
         instance_variable_get(speed)
-      end 
+      end
     end
 
     def gear(speed)
@@ -46,12 +49,12 @@ module Bicycle
     end
 
     def first
-      @speed_1 
+      @speed_1
     end
 
     def last
       @speed_11
     end
-    
+
   end
 end

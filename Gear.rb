@@ -1,15 +1,16 @@
 require 'pry'
-require_relative('Wheel')
-require_relative('Cassette')
+require_relative 'Wheel'
+require_relative 'Cassette'
 
 module Bicycle
   class Gear
-    attr_reader :chainring, :cassette, :wheel 
+    attr_reader :chainring, :cassette, :wheel
 
     def initialize(args={})
       @chainring     = args[:chainring] || {big: 53, small:39}
       @cassette      = args[:cassette] || Cassette.new()
-      @wheel         = args[:wheel] || Wheel.new() 
+      @wheel         = args[:wheel] || Wheel.new()
+      @ratios        =  Struct.new(:big, :small)
     end
 
     def ratio(args={})
@@ -19,10 +20,13 @@ module Bicycle
     end
 
     def ratios(args={})
-      chainring_size = args[:chainring_size] || :big
-      cassette.speeds.map do |speed|
-        (chainring[chainring_size] / speed.to_f).round(2)
+      big_ring_ratios = []
+      small_ring_ratios = []
+      cassette.speeds.each do |speed|
+        big_ring_ratios << ( sprintf('%.2f', (chainring[:big] / speed.to_f).round(2)))
+        small_ring_ratios << ( sprintf('%.2f', (chainring[:small] / speed.to_f).round(2)))
       end
+      @ratios[big_ring_ratios, small_ring_ratios]
     end
 
     def gear_inches(args={})
@@ -34,13 +38,54 @@ module Bicycle
     end
 
     def jump_ratio
-
+      (chainring[:big] / chainring[:small].to_f).round(2)
     end
 
   end
 end
 
+# puts "Create a Cassette e.g. '11,12,13,14,15,16,17,18,21,23,25'"
+# cassette =
+# binding.pry
+# if cassette.length != 10
+#   throw "The cassette must have 11 gears"
+# end
+
+# cassette = Bicycle::Cassette.new(gets)
+# puts "Big Chainring Tooth Count?"
+# big_ring = gets.to_i
+# puts "Small Chainring Tooth Count?"
+# small_ring = gets.to_1
+# gear = Bicycle::Gear.new(cassette: cassette, wheel: Bicycle::Wheel.new, chainring: {big: big_ring, small: small_ring})
+# puts
+# p gear.ratios.big
+# puts
+# p gear.ratios.small
+# puts
+
+
 wheel = Bicycle::Wheel.new()
 cassette = Bicycle::Cassette.new()
-gear = Bicycle::Gear.new(cassette: cassette, wheel: wheel)
-binding.pry
+regular = Bicycle::Gear.new(cassette: cassette, wheel: wheel)
+
+cassette3 = Bicycle::Cassette.new([11,12,13,14,15,16,17,19,21,23,25])
+compact2 = Bicycle::Gear.new(cassette: cassette3, wheel: wheel, chainring: {big:50, small:34})
+
+regular2 = Bicycle::Gear.new(cassette: cassette3, wheel: wheel)
+
+cassette2 = Bicycle::Cassette.new()
+compact = Bicycle::Gear.new(cassette:cassette2, wheel: wheel, chainring: {big:50, small:34})
+
+
+puts "53/39 11-28"
+p regular.ratios.big, regular.ratios.small, regular.jump_ratio
+puts
+puts "53/39 11:25"
+p regular2.ratios.big, regular2.ratios.small
+puts
+puts "50/34 11-28"
+p compact.ratios.big, compact.ratios.small
+puts
+puts "50/34 11-25"
+p compact2.ratios.big, compact2.ratios.small
+puts
