@@ -10,7 +10,6 @@ module Bicycle
       @chainring     = args[:chainring] || {big: 53, small:39}
       @cassette      = args[:cassette] || Cassette.new()
       @wheel         = args[:wheel] || Wheel.new()
-      @ratios        =  Struct.new(:big, :small)
     end
 
     def ratio(args={})
@@ -20,13 +19,21 @@ module Bicycle
     end
 
     def ratios(args={})
+      @ratios        =  Struct.new(:big, :small)
       big_ring_ratios = []
       small_ring_ratios = []
       cassette.speeds.each do |speed|
-        big_ring_ratios << ( sprintf('%.2f', (chainring[:big] / speed.to_f).round(2)))
-        small_ring_ratios << ( sprintf('%.2f', (chainring[:small] / speed.to_f).round(2)))
+        big_ring_ratios << ( (chainring[:big].to_f / speed.to_f).round(2))
+        small_ring_ratios << ( (chainring[:small].to_f / speed.to_f).round(2))
       end
       @ratios[big_ring_ratios, small_ring_ratios]
+    end
+
+    def top_bottom
+      big_ring_ratios = [ (chainring[:big] / cassette.first.to_f).round(2), (chainring[:big] / cassette.last.to_f).round(2) ]
+      small_ring_ratios = [ (chainring[:small] / cassette.first.to_f).round(2), (chainring[:small] / cassette.last.to_f).round(2) ]
+      @top_bottom = Struct.new(:big, :small)
+      @top_bottom[big_ring_ratios, small_ring_ratios]
     end
 
     def gear_inches(args={})
@@ -66,26 +73,46 @@ end
 
 wheel = Bicycle::Wheel.new()
 cassette = Bicycle::Cassette.new()
+cassette2 = Bicycle::Cassette.new([11,12,13,14,15,16,17,19,21,23,25])
+
 regular = Bicycle::Gear.new(cassette: cassette, wheel: wheel)
 
-cassette3 = Bicycle::Cassette.new([11,12,13,14,15,16,17,19,21,23,25])
-compact2 = Bicycle::Gear.new(cassette: cassette3, wheel: wheel, chainring: {big:50, small:34})
+regular_25 = Bicycle::Gear.new(cassette: cassette2, wheel: wheel)
 
-regular2 = Bicycle::Gear.new(cassette: cassette3, wheel: wheel)
+mid_compact = Bicycle::Gear.new(cassette: cassette, wheel: wheel, chainring: {big:52, small:36})
 
-cassette2 = Bicycle::Cassette.new()
-compact = Bicycle::Gear.new(cassette:cassette2, wheel: wheel, chainring: {big:50, small:34})
+compact = Bicycle::Gear.new(cassette: cassette, wheel: wheel, chainring: {big:50, small:34})
 
+regular_2 = Bicycle::Gear.new(cassette: cassette2, wheel: wheel)
 
+mid_compact_2 = Bicycle::Gear.new(cassette: cassette2, wheel: wheel, chainring: {big:52, small:36})
+
+compact_2 = Bicycle::Gear.new(cassette: cassette2, wheel: wheel, chainring: {big:50, small:34})
+
+mid_compact_3 = Bicycle::Gear.new(cassette: cassette, wheel: wheel, chainring: {big:52, small:36})
+
+puts
 puts "53/39 11-28"
-p regular.ratios.big, regular.ratios.small, regular.jump_ratio
+p regular.ratios.big, regular.ratios.small, regular.top_bottom
 puts
-puts "53/39 11:25"
-p regular2.ratios.big, regular2.ratios.small
+puts "53/39 11-25"
+p regular_25.ratios.big, regular_25.ratios.small, regular_25.top_bottom
 puts
-puts "50/34 11-28"
-p compact.ratios.big, compact.ratios.small
+puts "52/36 11-28"
+p mid_compact_3.ratios.big, mid_compact_3.ratios.small, mid_compact_3.top_bottom
 puts
-puts "50/34 11-25"
-p compact2.ratios.big, compact2.ratios.small
+# puts "52/36 11-28"
+# p mid_compact.ratios.big, mid_compact.ratios.small
+# puts
+# puts "50/34 11-28"
+# p compact.ratios.big, compact.ratios.small
+# puts
+# puts "53/39 11-25"
+# p regular_2.ratios.big, regular_2.ratios.small
+# puts
+puts "52/36 11-25"
+p mid_compact_2.ratios.big, mid_compact_2.ratios.small, mid_compact_2.top_bottom
+puts
+puts"50/34 11-25"
+p compact_2.ratios.big, compact_2.ratios.small, compact_2.top_bottom
 puts
