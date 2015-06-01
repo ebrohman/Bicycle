@@ -51,24 +51,6 @@ module Bicycle
   end
 end
 
-# puts "Create a Cassette e.g. '11,12,13,14,15,16,17,18,21,23,25'"
-# cassette =
-# binding.pry
-# if cassette.length != 10
-#   throw "The cassette must have 11 gears"
-# end
-
-# cassette = Bicycle::Cassette.new(gets)
-# puts "Big Chainring Tooth Count?"
-# big_ring = gets.to_i
-# puts "Small Chainring Tooth Count?"
-# small_ring = gets.to_1
-# gear = Bicycle::Gear.new(cassette: cassette, wheel: Bicycle::Wheel.new, chainring: {big: big_ring, small: small_ring})
-# puts
-# p gear.ratios.big
-# puts
-# p gear.ratios.small
-# puts
 
 
 wheel = Bicycle::Wheel.new()
@@ -81,15 +63,12 @@ regular_25 = Bicycle::Gear.new(cassette: cassette2, wheel: wheel)
 
 mid_compact = Bicycle::Gear.new(cassette: cassette, wheel: wheel, chainring: {big:52, small:36})
 
+mid_compact_25 = Bicycle::Gear.new(cassette: cassette2, wheel: wheel, chainring: {big:52, small:36})
+
 compact = Bicycle::Gear.new(cassette: cassette, wheel: wheel, chainring: {big:50, small:34})
 
-regular_2 = Bicycle::Gear.new(cassette: cassette2, wheel: wheel)
+compact_25 = Bicycle::Gear.new(cassette: cassette2, wheel: wheel, chainring: {big:50, small:34})
 
-mid_compact_2 = Bicycle::Gear.new(cassette: cassette2, wheel: wheel, chainring: {big:52, small:36})
-
-compact_2 = Bicycle::Gear.new(cassette: cassette2, wheel: wheel, chainring: {big:50, small:34})
-
-mid_compact_3 = Bicycle::Gear.new(cassette: cassette, wheel: wheel, chainring: {big:52, small:36})
 
 puts
 puts "53/39 11-28"
@@ -99,20 +78,14 @@ puts "53/39 11-25"
 p regular_25.ratios.big, regular_25.ratios.small, regular_25.top_bottom
 puts
 puts "52/36 11-28"
-p mid_compact_3.ratios.big, mid_compact_3.ratios.small, mid_compact_3.top_bottom
+p mid_compact.ratios.big, mid_compact.ratios.small, mid_compact.top_bottom
 puts
-# puts "52/36 11-28"
-# p mid_compact.ratios.big, mid_compact.ratios.small
-# puts
-# puts "50/34 11-28"
-# p compact.ratios.big, compact.ratios.small
-# puts
-# puts "53/39 11-25"
-# p regular_2.ratios.big, regular_2.ratios.small
-# puts
 puts "52/36 11-25"
-p mid_compact_2.ratios.big, mid_compact_2.ratios.small, mid_compact_2.top_bottom
+p mid_compact_25.ratios.big, mid_compact_25.ratios.small, mid_compact_25.top_bottom
 puts
-puts"50/34 11-25"
-p compact_2.ratios.big, compact_2.ratios.small, compact_2.top_bottom
+puts"50/34 11-28"
+p compact.ratios.big, compact.ratios.small, compact.top_bottom
+puts
+puts "50/34 11-25"
+p compact_25.ratios.big, compact_25.ratios.small, compact_25.top_bottom
 puts
